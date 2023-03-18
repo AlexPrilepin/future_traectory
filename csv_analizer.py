@@ -6,7 +6,8 @@ def csv_to_list():
         reader = csv.reader(csv_file)
         my_list = []
         for row in reader:
-            beg = row[0].split(';')
+            row = ','.join(row)
+            beg = row.split(';')
             beg[-1] = beg[-1].split(',')
             my_list.append(beg)
         return my_list

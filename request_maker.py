@@ -1,17 +1,25 @@
 import socket
-from csv_analizer import csv_to_list
-##from pythonping import ping
+from pythonping import ping
+import datetime
+import whois
 
 ##WTF PING DOES NOT ; ADMIN NEED PERMISSION
+##ping('8.8.8.8')
 
-list_servers = csv_to_list()
+##domain = whois.query('google.com')
+
+
+##AS WELL AS WHOIS
+##print(domain.__dict__)
+
 
 
 class One_request:
     def __init__(self, host, ports):
         self.host = host
-        self.port = ports.split(',')
+        self.ports = ports
         self.requests = []
+        self.group_requester()
 
     def make_single_request(self, port):
         obj = Single_port_request(self.host, port)
@@ -28,34 +36,31 @@ class Single_port_request:
         self.time_of_request = None
         self.ip_adress = None
         self.rtt_max_ms = None
-        self.state = None
+        self.state = False
+        self.packets = 0.0
+        self.make_request()
         
-    def check_host_and_port(self):
-        pass
-
     def make_request(self):
-        pass
+        self.time_of_request = datetime.datetime.now()
+        try:
+            
+            conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            conn.connect((self.host, int(self.port)))
+            print(conn)
+            conn_for_ip = str(conn).split('=')
+            flag1 = False
+            for i in conn_for_ip:
+                if flag1:
+                    self.ip_adress = i.split(', ')[0].strip('<>').strip('()').strip("'")
+                    break
+                if 'raddr' in i:
+                    flag1 = True
 
-    def log_yourself_into_upclass(self):
-        pass
+            print()
+############ MAKE WHOIS AND PYTHONPING REQUESTS
+        except Exception as ex:
+            print(ex)
+            print()
 
 
-for i in list_servers:
-    try:
-        on = One_request(i[0], i[1])
-    except Exception:
-        if i[0].split('.') in [1, 3]:
-            on = One_request(i[0], None)
-        else:
-            on = One_request(None, i[1])
-##        try:
-##            conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-##            host = i[0]
-##            port = int(j)
-##            conn.connect((host, port))
-##            print(conn)
-##            print()
-##        except Exception as ex:
-##            print(type(ex))
-##            print()
 
