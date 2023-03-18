@@ -4,14 +4,18 @@ import datetime
 import whois
 
 ##WTF PING DOES NOT ; ADMIN NEED PERMISSION
-##ping('8.8.8.8')
+##print(ping('8.8.8.8').__dict__)
+##print(ping('8.8.8.8', count=1).__dict__['_responses'])
 
 ##domain = whois.query('google.com')
 
 
 ##AS WELL AS WHOIS
 ##print(domain.__dict__)
-
+##import os
+##hostname = "google.com" #example
+##response = os.system("ping -c 1 " + hostname)
+##
 
 
 class One_request:
@@ -35,18 +39,20 @@ class Single_port_request:
         self.port = port
         self.time_of_request = None
         self.ip_adress = None
-        self.rtt_max_ms = None
+        self.rtt_max_ms = '2000 ms'
         self.state = False
-        self.packets = 0.0
+        self.packets = 1.0
         self.make_request()
         
     def make_request(self):
         self.time_of_request = datetime.datetime.now()
         try:
-            
+            pg = str(ping('8.8.8.8', count=1).__dict__['_responses'][0]).split()[-1]
+            print(pg)
+            self.packets = 1.0
+            self.rtt_max_ms = pg
             conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             conn.connect((self.host, int(self.port)))
-            print(conn)
             conn_for_ip = str(conn).split('=')
             flag1 = False
             for i in conn_for_ip:
@@ -57,9 +63,10 @@ class Single_port_request:
                     flag1 = True
 
             print()
+            self.state = True
 ############ MAKE WHOIS AND PYTHONPING REQUESTS
         except Exception as ex:
-            print(ex)
+            print(type(ex), ex)
             print()
 
 
