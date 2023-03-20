@@ -12,3 +12,4 @@ def csv_to_list():
             my_list.append(beg)
         return my_list
 
+# Just a standart module  for turning the csv table into a list
